@@ -1,0 +1,22 @@
+[Unit]
+Description=Spedo's distributed currency daemon
+After=network.target
+
+[Service]
+User=spedocore
+Group=spedocore
+
+Type=forking
+PIDFile=/var/lib/spedod/spedod.pid
+ExecStart=/usr/bin/spedod -daemon -pid=/var/lib/spedod/spedod.pid \
+-conf=/etc/spedocore/spedo.conf -datadir=/var/lib/spedod -disablewallet
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

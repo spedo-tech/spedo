@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Spedo
+Comment=Spedo P2P Cryptocurrency
+Exec=spedo-qt %u
+Terminal=false
+Type=Application
+Icon=spedo128
+MimeType=x-scheme-handler/spedo;
+Categories=Office;Finance;
+Name[en_US]=spedo-qt.desktop

@@ -1,0 +1,67 @@
+#!/bin/bash
+#
+#  spedod The Spedo Core server.
+#
+#
+# chkconfig: 345 80 20
+# description: spedod
+# processname: spedod
+#
+
+# Source function library.
+. /etc/init.d/functions
+
+# you can override defaults in /etc/sysconfig/spedod, see below
+if [ -f /etc/sysconfig/spedod ]; then
+        . /etc/sysconfig/spedod
+fi
+
+RETVAL=0
+
+prog=spedod
+# you can override the lockfile via BITCOIND_LOCKFILE in /etc/sysconfig/spedod
+lockfile=${BITCOIND_LOCKFILE-/var/lock/subsys/spedod}
+
+# spedod defaults to /usr/bin/spedod, override with BITCOIND_BIN
+spedod=${BITCOIND_BIN-/usr/bin/spedod}
+
+# spedod opts default to -disablewallet, override with BITCOIND_OPTS
+spedod_opts=${BITCOIND_OPTS--disablewallet}
+
+start() {
+    echo -n $"Starting $prog: "
+    daemon $DAEMONOPTS $spedod $spedod_opts
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && touch $lockfile
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    killproc $prog
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && rm -f $lockfile
+    return $RETVAL
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status $prog
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo "Usage: service $prog {start|stop|status|restart}"
+        exit 1
+        ;;
+esac
